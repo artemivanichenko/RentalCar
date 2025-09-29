@@ -2,7 +2,6 @@
 import Link from "next/link";
 import css from "./Header.module.css";
 import { usePathname } from "next/navigation";
-import Icon from "../Icons/Icons";
 
 const Header = () => {
 	const pathname = usePathname();

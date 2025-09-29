@@ -5,6 +5,7 @@ import { fetchCars } from "@/lib/api";
 import CarsList from "@/components/CarList/CarList";
 import SearchBox from "@/components/SearchBox/SearchBox";
 import { Car } from "@/types/car";
+import LoadMore from "@/components/LoadMore/LoadMore";
 
 interface FilterValues {
 	brand: string;
@@ -69,7 +70,7 @@ const CarsClient = () => {
 			</div>
 		);
 	}
-	const hasMore = data && data.length === 12 * page;
+	const hasMore = data && data.length === 12;
 	return (
 		<div>
 			<SearchBox onFilter={handleFilter} />
@@ -79,9 +80,7 @@ const CarsClient = () => {
 					<CarsList cars={allCars} />
 
 					{hasMore && (
-						<button onClick={handleLoadMore} disabled={isLoading}>
-							{isLoading ? "Loading..." : "Load more"}
-						</button>
+						<LoadMore onClick={handleLoadMore} isLoading={isLoading} />
 					)}
 				</>
 			) : (
