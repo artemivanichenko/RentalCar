@@ -4,6 +4,7 @@ import { useQuery } from "@tanstack/react-query";
 import { fetchCars } from "@/lib/api";
 import CarsList from "@/components/CarList/CarList";
 import SearchBox from "@/components/SearchBox/SearchBox";
+import { Car } from "@/types/car";
 
 interface FilterValues {
 	brand: string;
@@ -19,22 +20,37 @@ const CarsClient = () => {
 		mileageFrom: "",
 		mileageTo: "",
 	});
+	const [page, setPage] = useState(1);
+	const [allCars, setAllCars] = useState<Car[]>([]);
 
 	const { data, isLoading, isError, error } = useQuery({
-		queryKey: ["cars", filters],
-		queryFn: () =>
-			fetchCars(
+		queryKey: ["cars", filters, page],
+		queryFn: async () => {
+			const newCars = await fetchCars(
 				filters.brand || undefined,
 				filters.price || undefined,
 				filters.mileageFrom || undefined,
 				filters.mileageTo || undefined,
-				12, // limit
-				1 // page
-			),
+				12, // limit всегда 12
+				page // текущая страница
+			);
+			if (page === 1) {
+				setAllCars(newCars);
+			} else {
+				setAllCars((prev) => [...prev, ...newCars]);
+			}
+
+			return newCars;
+		},
 	});
 
 	const handleFilter = (newFilters: FilterValues) => {
 		setFilters(newFilters);
+		setPage(1);
+		setAllCars([]);
+	};
+	const handleLoadMore = () => {
+		setPage((prev) => prev + 1);
 	};
 
 	if (isLoading) {
@@ -53,17 +69,24 @@ const CarsClient = () => {
 			</div>
 		);
 	}
-
+	const hasMore = data && data.length === 12 * page;
 	return (
 		<div>
 			<SearchBox onFilter={handleFilter} />
-			<div>
-				{data && data.length > 0 ? (
-					<CarsList cars={data} />
-				) : (
-					<p>No cars found with current filters</p>
-				)}
-			</div>
+
+			{allCars.length > 0 ? (
+				<>
+					<CarsList cars={allCars} />
+
+					{hasMore && (
+						<button onClick={handleLoadMore} disabled={isLoading}>
+							{isLoading ? "Loading..." : "Load more"}
+						</button>
+					)}
+				</>
+			) : (
+				<p>No cars found</p>
+			)}
 		</div>
 	);
 };

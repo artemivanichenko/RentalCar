@@ -13,3 +13,7 @@
 	line-height: 125%;
 	color: var(--main);
 }
+.loadMoreBtn {
+	display: flex;
+	align-items: center;
+}
