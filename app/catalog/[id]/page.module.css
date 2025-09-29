@@ -1,0 +1,15 @@
+.title {
+	font-family: var(--font-family);
+	font-weight: 600;
+	font-size: 16px;
+	line-height: 125%;
+	color: var(--main);
+}
+
+.description {
+	font-family: var(--font-family);
+	font-weight: 500;
+	font-size: 16px;
+	line-height: 125%;
+	color: var(--main);
+}

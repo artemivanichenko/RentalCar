@@ -1,0 +1,275 @@
+.container {
+	width: 1200px;
+	margin: 84px auto 0;
+	display: flex;
+}
+
+.leftColumn {
+	display: flex;
+	flex-direction: column;
+	width: 640px;
+	margin-right: 72px;
+}
+
+.imageContainer {
+	position: relative;
+	width: 640px;
+	height: 512px;
+}
+
+.carImage {
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+	border-radius: 12px;
+}
+
+.bookingForm {
+	border: 1px solid var(--gray-light);
+	border-radius: 10px;
+	width: 640px;
+	height: 488px;
+	margin-top: 40px;
+}
+
+.formTitle {
+	font-family: var(--font-family);
+	font-weight: 600;
+	font-size: 20px;
+	line-height: 120%;
+	color: var(--main);
+	margin-top: 32px;
+	margin-left: 32px;
+	width: 576px;
+}
+
+.formSubtitle {
+	font-family: var(--font-family);
+	font-weight: 500;
+	font-size: 16px;
+	line-height: 125%;
+	color: var(--gray);
+	margin-top: 8px;
+	margin-left: 32px;
+}
+
+.orderForm {
+	display: flex;
+	flex-direction: column;
+	margin: 24px 32px 24px;
+}
+.formGroup {
+	display: flex;
+	flex-direction: column;
+	gap: 16px;
+}
+.inputForm {
+	border-radius: 12px;
+	width: 576px;
+}
+.formInput {
+	border: 1px solid transparent;
+	border-radius: 12px;
+	padding: 12px 20px;
+	width: 576px;
+	font-family: var(--font-family);
+	font-weight: 500;
+	font-size: 16px;
+	line-height: 125%;
+	color: var(--gray);
+	background: var(--inputs);
+}
+.formInput:focus {
+	border-color: var(--gray-light);
+	outline: none;
+}
+.formTextarea {
+	border: 1px solid transparent;
+	border-radius: 12px;
+	font-family: var(--font-family);
+	font-weight: 500;
+	font-size: 16px;
+	line-height: 125%;
+	color: var(--gray);
+	background: var(--inputs);
+	margin-top: 16px;
+	padding: 12px 20px 56px;
+	width: 576px;
+	height: 88px;
+	resize: none;
+	overflow: hidden;
+}
+
+.formTextarea:focus {
+	border-color: var(--gray-light);
+	outline: none;
+}
+
+.submitBtn {
+	border-radius: 12px;
+	padding: 12px 51px;
+	width: 156px;
+	height: 44px;
+	background: var(--button);
+	font-family: var(--font-family);
+	font-weight: 600;
+	font-size: 16px;
+	line-height: 125%;
+	color: var(--white);
+	margin: 24px auto;
+}
+
+.submitBtn:hover {
+	background-color: var(--button-hover);
+}
+
+.rightColumn {
+	width: 488px;
+	display: flex;
+	flex-direction: column;
+}
+
+.carInfo {
+	display: flex;
+	flex-direction: column;
+}
+
+.carTitle {
+	font-family: var(--font-family);
+	font-weight: 500;
+	font-size: 24px;
+	line-height: 125%;
+	color: var(--main);
+	margin-top: 8px;
+}
+
+.carId {
+	font-family: var(--font-family);
+	font-weight: 500;
+	font-size: 16px;
+	line-height: 125%;
+	color: var(--gray);
+	margin-left: 16px;
+}
+.carMeta {
+	display: flex;
+	align-items: center;
+	font-family: var(--font-family);
+	font-weight: 500;
+	font-size: 16px;
+	line-height: 125%;
+	color: var(--main);
+	margin-top: 8px;
+}
+.mileage {
+	margin-left: 16px;
+}
+.price {
+	font-family: var(--font-family);
+	font-weight: 600;
+	font-size: 24px;
+	line-height: 133%;
+	color: var(--button);
+	margin-top: 16px;
+}
+
+.description {
+	font-family: var(--font-family);
+	font-weight: 500;
+	font-size: 16px;
+	line-height: 125%;
+	color: var(--main);
+	margin-top: 32px;
+}
+
+.infoSection {
+	display: flex;
+	flex-direction: column;
+	margin-top: 68px;
+	gap: 110px;
+}
+
+.sectionItem {
+	display: flex;
+	flex-direction: column;
+}
+.sectionTitle {
+	font-family: var(--font-family);
+	font-weight: 600;
+	font-size: 20px;
+	line-height: 120%;
+	color: var(--main);
+}
+
+.subsection {
+	display: flex;
+	flex-direction: column;
+	margin-top: 20px;
+	gap: 16px;
+}
+
+.checkIcon {
+	width: 16px;
+	height: 16px;
+}
+
+.sectionText {
+	font-family: var(--font-family);
+	font-weight: 500;
+	font-size: 16px;
+	line-height: 125%;
+	color: var(--main);
+	margin-left: 8px;
+}
+
+.specsList {
+	display: flex;
+	flex-direction: column;
+	gap: 8px;
+}
+
+.specItem {
+	display: flex;
+	align-items: center;
+	gap: 12px;
+}
+
+.specIcon {
+	width: 16px;
+	height: 16px;
+	color: var(--gray);
+}
+
+.specText {
+	font-family: var(--font-family);
+	font-weight: 400;
+	font-size: 14px;
+	line-height: 133%;
+	color: var(--main);
+}
+
+.featuresList {
+	display: flex;
+	flex-direction: column;
+	gap: 8px;
+}
+
+.featureItem {
+	display: flex;
+	align-items: center;
+	gap: 12px;
+}
+
+.featureIcon {
+	width: 16px;
+	height: 16px;
+	color: var(--button);
+}
+
+.featureText {
+	font-family: var(--font-family);
+	font-weight: 400;
+	font-size: 14px;
+	line-height: 133%;
+	color: var(--main);
+}

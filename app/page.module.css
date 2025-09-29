@@ -1,0 +1,48 @@
+.container {
+	margin-top: 436px;
+	text-align: center;
+}
+
+.title {
+	font-weight: 700;
+	font-size: 60px;
+	line-height: 120%;
+	color: var(--white);
+}
+
+.description {
+	font-weight: 600;
+	font-size: 24px;
+	line-height: 133%;
+	color: var(--white);
+}
+
+.hero {
+	height: 100vh;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	background: var(--hero-image);
+	background-size: cover;
+	background-position: center;
+}
+
+.link {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	background: var(--button);
+	border-radius: 12px;
+	border: 2px solid transparent;
+	width: 298px;
+	height: 44px;
+	font-weight: 600;
+	font-size: 16px;
+	line-height: 125%;
+	margin: auto;
+	color: var(--white);
+	margin-top: 40px;
+}
+.link:hover {
+	background: var(--button-hover);
+}
