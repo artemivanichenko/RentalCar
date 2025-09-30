@@ -1,14 +1,43 @@
+"use client";
 import { Car } from "@/types/car";
-import Link from "next/link";
 import { useParams } from "next/navigation";
 import { fetchCarById } from "@/lib/api";
 import { useQuery } from "@tanstack/react-query";
+import { Formik, Form, Field, ErrorMessage } from "formik";
+import * as Yup from "yup";
+import toast from "react-hot-toast";
 import css from "./CarDetails.module.css";
 import Icon from "../Icons/Icons";
+import DatePicker from "../DatePicker/DatePicker";
 
 interface CarPreviewProps {
 	car: Car;
 }
+
+interface BookingFormValues {
+	name: string;
+	email: string;
+	bookingDate: Date | null;
+	comment: string;
+}
+
+const validationSchema = Yup.object({
+	name: Yup.string()
+		.min(2, "Name must be at least 2 characters")
+		.required("Name is required"),
+	email: Yup.string()
+		.email("Invalid email address")
+		.required("Email is required"),
+	bookingDate: Yup.date()
+		.nullable()
+		.required("Booking date is required")
+		.min(
+			new Date().setHours(0, 0, 0, 0),
+			"Booking date cannot be in the past"
+		)
+		.typeError("Please select a valid date"),
+	comment: Yup.string().max(500, "Comment must be less than 500 characters"),
+});
 
 const CarDetails = ({ car }: CarPreviewProps) => {
 	const { id } = useParams<{ id: string }>();
@@ -17,6 +46,43 @@ const CarDetails = ({ car }: CarPreviewProps) => {
 		queryFn: () => fetchCarById(id),
 		refetchOnMount: false,
 	}) as { data: Car };
+
+	const initialValues: BookingFormValues = {
+		name: "",
+		email: "",
+		bookingDate: null,
+		comment: "",
+	};
+
+	const handleSubmit = async (
+		values: BookingFormValues,
+		{ resetForm }: { resetForm: () => void }
+	) => {
+		try {
+			await new Promise((resolve) => setTimeout(resolve, 1000));
+
+			toast.success(
+				`Booking successful! We'll contact you at ${values.email} soon.`,
+				{
+					duration: 4000,
+					style: {
+						background: "#10b981",
+						color: "#fff",
+					},
+				}
+			);
+
+			resetForm();
+		} catch (error) {
+			toast.error("Booking failed. Please try again.", {
+				duration: 4000,
+				style: {
+					background: "#ef4444",
+					color: "#fff",
+				},
+			});
+		}
+	};
 
 	return (
 		<div className={css.container}>
@@ -34,40 +100,94 @@ const CarDetails = ({ car }: CarPreviewProps) => {
 					<p className={css.formSubtitle}>
 						Stay connected! We are always ready to help you.
 					</p>
-					<div className={css.orderForm}>
-						<div className={css.formGroup}>
-							<div className={css.inputForm}>
-								<input
-									type="text"
-									placeholder="Name*"
-									className={css.formInput}
-								/>
-							</div>
 
-							<div className={css.inputForm}>
-								<input
-									type="email"
-									placeholder="Email*"
-									className={css.formInput}
-								/>
-							</div>
+					<Formik
+						initialValues={initialValues}
+						validationSchema={validationSchema}
+						onSubmit={handleSubmit}>
+						{({ isSubmitting }) => (
+							<Form className={css.orderForm}>
+								<div className={css.formGroup}>
+									<div className={css.inputForm}>
+										<Field
+											type="text"
+											name="name"
+											placeholder="Name*"
+											className={css.formInput}
+										/>
+										<ErrorMessage
+											name="name"
+											component="span"
+											className={css.errorMessage}
+										/>
+									</div>
 
-							<div className={css.inputForm}>
-								<input
-									type="text"
-									placeholder="Booking date"
-									className={css.formInput}
-								/>
-							</div>
+									<div className={css.inputForm}>
+										<Field
+											type="email"
+											name="email"
+											placeholder="Email*"
+											className={css.formInput}
+										/>
+										<ErrorMessage
+											name="email"
+											component="span"
+											className={css.errorMessage}
+										/>
+									</div>
 
-							<div className={css.inputForm}>
-								<textarea
-									placeholder="Comment"
-									className={css.formTextarea}></textarea>
-							</div>
-						</div>
-						<button className={css.submitBtn}>Send</button>
-					</div>
+									<div className={css.inputForm}>
+										<Field
+											name="bookingDate"
+											className={css.formInput}>
+											{({ field, form }: any) => (
+												<DatePicker
+													value={
+														field.value
+															? new Date(field.value)
+															: null
+													}
+													onChange={(date) => {
+														form.setFieldValue(
+															"bookingDate",
+															date
+														);
+													}}
+													placeholder="Booking date"
+												/>
+											)}
+										</Field>
+										<ErrorMessage
+											name="bookingDate"
+											component="span"
+											className={css.errorMessage}
+										/>
+									</div>
+
+									<div className={css.inputForm}>
+										<Field
+											as="textarea"
+											name="comment"
+											placeholder="Comment"
+											className={css.formTextarea}
+										/>
+										<ErrorMessage
+											name="comment"
+											component="span"
+											className={css.errorMessage}
+										/>
+									</div>
+								</div>
+
+								<button
+									type="submit"
+									className={css.submitBtn}
+									disabled={isSubmitting}>
+									{isSubmitting ? "Sending..." : "Send"}
+								</button>
+							</Form>
+						)}
+					</Formik>
 				</div>
 			</div>
 
@@ -87,7 +207,9 @@ const CarDetails = ({ car }: CarPreviewProps) => {
 							<Icon name="location" />
 							Kyiv, Ukraine
 						</div>
-						<div className={css.mileage}>Mileage: {data.mileage} km</div>
+						<div className={css.mileage}>
+							Mileage: {data.mileage.toLocaleString()} km
+						</div>
 					</div>
 					<span className={css.price}>${data.rentalPrice}</span>
 					<p className={css.description}>{data.description}</p>
@@ -98,7 +220,13 @@ const CarDetails = ({ car }: CarPreviewProps) => {
 						<h2 className={css.sectionTitle}>Rental Conditions:</h2>
 						<div className={css.subsection}>
 							{data.rentalConditions.map((condition, index) => (
-								<div key={index}>
+								<div
+									key={index}
+									style={{
+										display: "flex",
+										alignItems: "center",
+										gap: "8px",
+									}}>
 									<Icon name="check" />
 									<span className={css.sectionText}>{condition}</span>
 								</div>
@@ -107,34 +235,54 @@ const CarDetails = ({ car }: CarPreviewProps) => {
 					</div>
 
 					<div className={css.sectionItem}>
-						<div className={css.sectionItem}>
-							<h2 className={css.sectionTitle}>Car Specifications:</h2>
-							<div className={css.subsection}>
-								<div>
-									<Icon name="calendar" />
-									<span className={css.sectionText}>
-										Year: {data.year}
-									</span>
-								</div>
+						<h2 className={css.sectionTitle}>Car Specifications:</h2>
+						<div className={css.subsection}>
+							<div
+								style={{
+									display: "flex",
+									alignItems: "center",
+									gap: "8px",
+								}}>
+								<Icon name="calendar" />
+								<span className={css.sectionText}>
+									Year: {data.year}
+								</span>
+							</div>
 
-								<div>
-									<Icon name="car" />
-									<span className={css.sectionText}>
-										Type: {data.type}
-									</span>
-								</div>
-								<div>
-									<Icon name="fuel-pump" />
-									<span className={css.sectionText}>
-										Fuel Consumption: {data.fuelConsumption}
-									</span>
-								</div>
-								<div>
-									<Icon name="gear" />
-									<span className={css.sectionText}>
-										Engine Size: {data.engineSize}
-									</span>
-								</div>
+							<div
+								style={{
+									display: "flex",
+									alignItems: "center",
+									gap: "8px",
+								}}>
+								<Icon name="car" />
+								<span className={css.sectionText}>
+									Type: {data.type}
+								</span>
+							</div>
+
+							<div
+								style={{
+									display: "flex",
+									alignItems: "center",
+									gap: "8px",
+								}}>
+								<Icon name="fuel-pump" />
+								<span className={css.sectionText}>
+									Fuel Consumption: {data.fuelConsumption}
+								</span>
+							</div>
+
+							<div
+								style={{
+									display: "flex",
+									alignItems: "center",
+									gap: "8px",
+								}}>
+								<Icon name="gear" />
+								<span className={css.sectionText}>
+									Engine Size: {data.engineSize}
+								</span>
 							</div>
 						</div>
 					</div>
@@ -146,7 +294,13 @@ const CarDetails = ({ car }: CarPreviewProps) => {
 						<div className={css.subsection}>
 							{[...data.accessories, ...data.functionalities].map(
 								(feature, index) => (
-									<div key={index}>
+									<div
+										key={index}
+										style={{
+											display: "flex",
+											alignItems: "center",
+											gap: "8px",
+										}}>
 										<Icon name="check" />
 										<span className={css.sectionText}>{feature}</span>
 									</div>

@@ -28,8 +28,8 @@
 	border: 1px solid var(--gray-light);
 	border-radius: 10px;
 	width: 640px;
-	height: 488px;
 	margin-top: 40px;
+	padding-bottom: 24px;
 }
 
 .formTitle {
@@ -56,17 +56,21 @@
 .orderForm {
 	display: flex;
 	flex-direction: column;
-	margin: 24px 32px 24px;
+	margin: 24px 32px 0;
 }
+
 .formGroup {
 	display: flex;
 	flex-direction: column;
 	gap: 16px;
 }
+
 .inputForm {
 	border-radius: 12px;
 	width: 576px;
+	position: relative;
 }
+
 .formInput {
 	border: 1px solid transparent;
 	border-radius: 12px;
@@ -76,13 +80,16 @@
 	font-weight: 500;
 	font-size: 16px;
 	line-height: 125%;
-	color: var(--gray);
+	color: var(--main);
 	background: var(--inputs);
+	transition: border-color 0.3s;
 }
+
 .formInput:focus {
-	border-color: var(--gray-light);
+	border-color: var(--button);
 	outline: none;
 }
+
 .formTextarea {
 	border: 1px solid transparent;
 	border-radius: 12px;
@@ -90,19 +97,27 @@
 	font-weight: 500;
 	font-size: 16px;
 	line-height: 125%;
-	color: var(--gray);
+	color: var(--main);
 	background: var(--inputs);
-	margin-top: 16px;
-	padding: 12px 20px 56px;
+	padding: 12px 20px;
 	width: 576px;
 	height: 88px;
 	resize: none;
 	overflow: hidden;
+	transition: border-color 0.3s;
 }
 
 .formTextarea:focus {
-	border-color: var(--gray-light);
+	border-color: var(--button);
 	outline: none;
+}
+
+.errorMessage {
+	display: block;
+	color: #ef4444;
+	font-size: 12px;
+	margin-top: 4px;
+	font-family: var(--font-family);
 }
 
 .submitBtn {
@@ -116,11 +131,19 @@
 	font-size: 16px;
 	line-height: 125%;
 	color: var(--white);
-	margin: 24px auto;
+	margin: 24px auto 0;
+	cursor: pointer;
+	transition: background-color 0.3s;
+	border: none;
 }
 
-.submitBtn:hover {
+.submitBtn:hover:not(:disabled) {
 	background-color: var(--button-hover);
+}
+
+.submitBtn:disabled {
+	opacity: 0.6;
+	cursor: not-allowed;
 }
 
 .rightColumn {
@@ -151,6 +174,7 @@
 	color: var(--gray);
 	margin-left: 16px;
 }
+
 .carMeta {
 	display: flex;
 	align-items: center;
@@ -161,9 +185,11 @@
 	color: var(--main);
 	margin-top: 8px;
 }
+
 .mileage {
 	margin-left: 16px;
 }
+
 .price {
 	font-family: var(--font-family);
 	font-weight: 600;
@@ -193,6 +219,7 @@
 	display: flex;
 	flex-direction: column;
 }
+
 .sectionTitle {
 	font-family: var(--font-family);
 	font-weight: 600;
@@ -208,68 +235,10 @@
 	gap: 16px;
 }
 
-.checkIcon {
-	width: 16px;
-	height: 16px;
-}
-
 .sectionText {
 	font-family: var(--font-family);
 	font-weight: 500;
 	font-size: 16px;
 	line-height: 125%;
-	color: var(--main);
-	margin-left: 8px;
-}
-
-.specsList {
-	display: flex;
-	flex-direction: column;
-	gap: 8px;
-}
-
-.specItem {
-	display: flex;
-	align-items: center;
-	gap: 12px;
-}
-
-.specIcon {
-	width: 16px;
-	height: 16px;
-	color: var(--gray);
-}
-
-.specText {
-	font-family: var(--font-family);
-	font-weight: 400;
-	font-size: 14px;
-	line-height: 133%;
-	color: var(--main);
-}
-
-.featuresList {
-	display: flex;
-	flex-direction: column;
-	gap: 8px;
-}
-
-.featureItem {
-	display: flex;
-	align-items: center;
-	gap: 12px;
-}
-
-.featureIcon {
-	width: 16px;
-	height: 16px;
-	color: var(--button);
-}
-
-.featureText {
-	font-family: var(--font-family);
-	font-weight: 400;
-	font-size: 14px;
-	line-height: 133%;
 	color: var(--main);
 }

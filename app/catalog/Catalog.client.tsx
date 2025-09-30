@@ -56,7 +56,7 @@ const CarsClient = () => {
 		setPage((prev) => prev + 1);
 	};
 
-	if (isLoading) {
+	if (isLoading && page === 1) {
 		return (
 			<div style={{ padding: "20px", textAlign: "center" }}>
 				<h2>Loading cars...</h2>

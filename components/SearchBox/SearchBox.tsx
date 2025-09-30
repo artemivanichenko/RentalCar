@@ -134,7 +134,7 @@ const SearchBox: React.FC<SearchBoxProps> = ({ onFilter }) => {
 								placeholder="To"
 								value={
 									values.mileageTo
-										? `From ${parseInt(
+										? `To ${parseInt(
 												values.mileageTo
 										  ).toLocaleString()}`
 										: ""
