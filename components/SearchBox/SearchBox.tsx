@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Formik, Form } from "formik";
 import { brands } from "@/types/car";
 import css from "./SearchBox.module.css";
+import Icon from "../Icons/Icons";
 
 interface SearchBoxProps {
 	onFilter: (filters: SearchBox) => void;
@@ -16,7 +17,6 @@ interface SearchBox {
 const SearchBox: React.FC<SearchBoxProps> = ({ onFilter }) => {
 	const [showBrandDropdown, setShowBrandDropdown] = useState(false);
 	const [showPriceDropdown, setShowPriceDropdown] = useState(false);
-	const [focusedInput, setFocusedInput] = useState<string | null>(null);
 
 	const priceRanges = [
 		{ label: "30", value: "30" },
@@ -53,18 +53,7 @@ const SearchBox: React.FC<SearchBoxProps> = ({ onFilter }) => {
 							className={css.searchInput}
 							onClick={() => setShowBrandDropdown(!showBrandDropdown)}>
 							{values.brand || "Choose a brand"}
-							<svg
-								className={css.chevron}
-								width="20"
-								height="20"
-								viewBox="0 0 20 20">
-								<path
-									d="M5 7.5L10 12.5L15 7.5"
-									stroke="currentColor"
-									strokeWidth="2"
-									fill="none"
-								/>
-							</svg>
+							<Icon name={showBrandDropdown ? "up" : "down"} />
 						</button>
 
 						{showBrandDropdown && (
@@ -92,18 +81,7 @@ const SearchBox: React.FC<SearchBoxProps> = ({ onFilter }) => {
 							className={css.searchInput}
 							onClick={() => setShowPriceDropdown(!showPriceDropdown)}>
 							{values.price ? `To $${values.price}` : "Choose a price"}
-							<svg
-								className={css.chevron}
-								width="20"
-								height="20"
-								viewBox="0 0 20 20">
-								<path
-									d="M5 7.5L10 12.5L15 7.5"
-									stroke="currentColor"
-									strokeWidth="2"
-									fill="none"
-								/>
-							</svg>
+							<Icon name={showPriceDropdown ? "up" : "down"} />
 						</button>
 
 						{showPriceDropdown && (
@@ -132,7 +110,9 @@ const SearchBox: React.FC<SearchBoxProps> = ({ onFilter }) => {
 								placeholder="From"
 								value={
 									values.mileageFrom
-										? `From ${values.mileageFrom}`
+										? `From ${parseInt(
+												values.mileageFrom
+										  ).toLocaleString()}`
 										: ""
 								}
 								onChange={(e) => {
@@ -152,7 +132,13 @@ const SearchBox: React.FC<SearchBoxProps> = ({ onFilter }) => {
 							<input
 								type="text"
 								placeholder="To"
-								value={values.mileageTo ? `To ${values.mileageTo}` : ""}
+								value={
+									values.mileageTo
+										? `From ${parseInt(
+												values.mileageTo
+										  ).toLocaleString()}`
+										: ""
+								}
 								onChange={(e) => {
 									const numericValue = e.target.value.replace(
 										/\D/g,
