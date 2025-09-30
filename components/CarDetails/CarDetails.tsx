@@ -32,7 +32,7 @@ const validationSchema = Yup.object({
 		.nullable()
 		.required("Booking date is required")
 		.min(
-			new Date().setHours(0, 0, 0, 0),
+			new Date(new Date().setHours(0, 0, 0, 0)),
 			"Booking date cannot be in the past"
 		)
 		.typeError("Please select a valid date"),
