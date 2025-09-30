@@ -6,6 +6,7 @@ import CarsList from "@/components/CarList/CarList";
 import SearchBox from "@/components/SearchBox/SearchBox";
 import { Car } from "@/types/car";
 import LoadMore from "@/components/LoadMore/LoadMore";
+import { useFavorites } from "@/hooks/useFavorites";
 
 interface FilterValues {
 	brand: string;
@@ -23,6 +24,7 @@ const CarsClient = () => {
 	});
 	const [page, setPage] = useState(1);
 	const [allCars, setAllCars] = useState<Car[]>([]);
+	const { favorites, toggleFavorite } = useFavorites();
 
 	const { data, isLoading, isError, error } = useQuery({
 		queryKey: ["cars", filters, page],
@@ -77,7 +79,11 @@ const CarsClient = () => {
 
 			{allCars.length > 0 ? (
 				<>
-					<CarsList cars={allCars} />
+					<CarsList
+						cars={allCars}
+						favorites={favorites}
+						onToggleFavorite={toggleFavorite}
+					/>
 
 					{hasMore && (
 						<LoadMore onClick={handleLoadMore} isLoading={isLoading} />
