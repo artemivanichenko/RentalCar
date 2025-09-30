@@ -3,6 +3,8 @@ import { useQuery } from "@tanstack/react-query";
 import { useParams } from "next/navigation";
 import { fetchCarById } from "@/lib/api";
 import CarDetails from "@/components/CarDetails/CarDetails";
+import Loader from "@/components/Loader/Loader";
+import Error from "@/components/Error/Error";
 
 const CarDetailsClient = () => {
 	const { id } = useParams<{ id: string }>();
@@ -11,13 +13,12 @@ const CarDetailsClient = () => {
 		queryFn: () => fetchCarById(id),
 		refetchOnMount: false,
 	});
-	return (
-		<>
-			{data && <CarDetails car={data} />}
-			{isLoading && <p>Loading...</p>}
-			{error && <p>Error 😅</p>}
-		</>
-	);
+
+	if (isLoading) return <Loader />;
+	if (error) return <Error />;
+	if (!data) return <Error />;
+
+	return <CarDetails />;
 };
 
 export default CarDetailsClient;

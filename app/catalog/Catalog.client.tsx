@@ -7,6 +7,8 @@ import SearchBox from "@/components/SearchBox/SearchBox";
 import { Car } from "@/types/car";
 import LoadMore from "@/components/LoadMore/LoadMore";
 import { useFavorites } from "@/hooks/useFavorites";
+import Loader from "@/components/Loader/Loader";
+import Error from "@/components/Error/Error";
 
 interface FilterValues {
 	brand: string;
@@ -26,7 +28,7 @@ const CarsClient = () => {
 	const [allCars, setAllCars] = useState<Car[]>([]);
 	const { favorites, toggleFavorite } = useFavorites();
 
-	const { data, isLoading, isError, error } = useQuery({
+	const { data, isLoading, isError } = useQuery({
 		queryKey: ["cars", filters, page],
 		queryFn: async () => {
 			const newCars = await fetchCars(
@@ -57,20 +59,11 @@ const CarsClient = () => {
 	};
 
 	if (isLoading && page === 1) {
-		return (
-			<div style={{ padding: "20px", textAlign: "center" }}>
-				<h2>Loading cars...</h2>
-			</div>
-		);
+		return <Loader />;
 	}
 
 	if (isError) {
-		return (
-			<div style={{ padding: "20px", textAlign: "center", color: "red" }}>
-				<h2>Error loading cars</h2>
-				<p>{error instanceof Error ? error.message : "Unknown error"}</p>
-			</div>
-		);
+		return <Error />;
 	}
 	const hasMore = data && data.length === 12;
 	return (

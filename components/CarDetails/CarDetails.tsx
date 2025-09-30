@@ -3,16 +3,17 @@ import { Car } from "@/types/car";
 import { useParams } from "next/navigation";
 import { fetchCarById } from "@/lib/api";
 import { useQuery } from "@tanstack/react-query";
-import { Formik, Form, Field, ErrorMessage } from "formik";
+import { Formik, Form, Field, ErrorMessage, FieldProps } from "formik";
 import * as Yup from "yup";
 import toast from "react-hot-toast";
 import css from "./CarDetails.module.css";
 import Icon from "../Icons/Icons";
 import DatePicker from "../DatePicker/DatePicker";
+import Image from "next/image";
 
-interface CarPreviewProps {
-	car: Car;
-}
+// interface CarPreviewProps {
+// 	car: Car;
+// }
 
 interface BookingFormValues {
 	name: string;
@@ -31,15 +32,20 @@ const validationSchema = Yup.object({
 	bookingDate: Yup.date()
 		.nullable()
 		.required("Booking date is required")
-		.min(
-			new Date(new Date().setHours(0, 0, 0, 0)),
-			"Booking date cannot be in the past"
+		.test(
+			"is-future-or-today",
+			"Booking date cannot be in the past",
+			(value) => {
+				if (!value) return true;
+				const today = new Date();
+				today.setHours(0, 0, 0, 0);
+				return value >= today;
+			}
 		)
 		.typeError("Please select a valid date"),
 	comment: Yup.string().max(500, "Comment must be less than 500 characters"),
 });
-
-const CarDetails = ({ car }: CarPreviewProps) => {
+const CarDetails = () => {
 	const { id } = useParams<{ id: string }>();
 	const { data } = useQuery({
 		queryKey: ["car", id],
@@ -73,7 +79,7 @@ const CarDetails = ({ car }: CarPreviewProps) => {
 			);
 
 			resetForm();
-		} catch (error) {
+		} catch {
 			toast.error("Booking failed. Please try again.", {
 				duration: 4000,
 				style: {
@@ -88,10 +94,12 @@ const CarDetails = ({ car }: CarPreviewProps) => {
 		<div className={css.container}>
 			<div className={css.leftColumn}>
 				<div className={css.imageContainer}>
-					<img
+					<Image
 						src={data.img}
 						alt={`${data.brand} ${data.model}`}
 						className={css.carImage}
+						width={640}
+						height={512}
 					/>
 				</div>
 
@@ -140,7 +148,7 @@ const CarDetails = ({ car }: CarPreviewProps) => {
 										<Field
 											name="bookingDate"
 											className={css.formInput}>
-											{({ field, form }: any) => (
+											{({ field, form }: FieldProps) => (
 												<DatePicker
 													value={
 														field.value
